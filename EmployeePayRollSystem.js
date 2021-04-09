@@ -47,17 +47,43 @@ class EmployeePayRollSystem {
                 noOfDaysAbsent += 1
             }
         }
-        return [noOfDaysPersent, noOfDaysAbsent]
+        return [noOfDaysPersent, noOfDaysAbsent, noOfDaysPersent * 8, noOfDaysPersent * 4]
+    }
+
+    checkSalaryEligibilty(obj) {
+        let result = this.simulateTwentyDaysAttandence();
+        let type = obj.type
+        if (type == "Full") {
+            if (result[1] > 15 || result[2] > 100) {
+                return true
+            }
+            else {
+                return false;
+            }
+        }
+        else if (type == "Part") {
+            if (result[1] > 10 || result[2] > 80) {
+                return true
+            }
+            else {
+                return false;
+            }
+        }
+
     }
 
     calculateMonthlyWage(obj) {
-        let result = this.simulateTwentyDaysAttandence();
-        let noOfDaysPersent = result[0];
-        let dailyWage = this.calculateWageOFEmployee(obj)
-        return dailyWage * noOfDaysPersent;
+        let payEligibilty = this.checkSalaryEligibilty(obj);
+        if (payEligibilty == true) {
+            let result = this.simulateTwentyDaysAttandence()
+            let dailyWage = this.calculateWageOFEmployee(obj)
+            return dailyWage * result[0];
+        }
+        else {
+            console.log("Employee has not met condition to get salary this month")
+            return 0;
+        }
     }
-
 }
-
 
 module.exports = EmployeePayRollSystem;
