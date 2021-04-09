@@ -61,4 +61,17 @@ describe("Testin Employee Pay Roll System", () => {
         console.log(map)
         expect(dailyWage).to.be.equal(160);
     })
+
+    it("Test if correct total wage is stored by summing up ", () => {
+        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
+        const result = employeePayRollSystem.calculateMonthlyWage(emp);
+        let map1 = result[1];
+        let map2 = map1.get('DayWiseWage')
+        let sum = 0;
+        for (let i = 0; i <= 20; i++) {
+            str = "day" + i;
+            sum += map2.get(str);
+        }
+        expect(map1.get('TotalWage')).to.be.equal(sum);
+    })
 });
