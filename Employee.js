@@ -20,6 +20,16 @@ class EmployeeBuilder {
         return this
     }
 
+    setEmployeeType(type) {
+        this.Employee.type=type
+        return this
+    }
+
+    setEmployeeWage(wage) {
+        this.Employee.wage=wage
+        return this
+    }
+
     build() {
         return this.Employee
     }
