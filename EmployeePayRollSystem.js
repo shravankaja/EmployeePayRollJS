@@ -35,6 +35,29 @@ class EmployeePayRollSystem {
         }
     }
 
+    simulateTwentyDaysAttandence() {
+        let noOfDaysPersent = 0;
+        let noOfDaysAbsent = 0;
+        for (let i = 0; i <= 20; i++) {
+            let result = this.checkPresentOrNot();
+            if (result == true) {
+                noOfDaysPersent += 1
+            }
+            else if (result == false) {
+                noOfDaysAbsent += 1
+            }
+        }
+        return [noOfDaysPersent, noOfDaysAbsent]
+    }
+
+    calculateMonthlyWage(obj) {
+        let result = this.simulateTwentyDaysAttandence();
+        let noOfDaysPersent = result[0];
+        let dailyWage = this.calculateWageOFEmployee(obj)
+        return dailyWage * noOfDaysPersent;
+    }
+
 }
+
 
 module.exports = EmployeePayRollSystem;
