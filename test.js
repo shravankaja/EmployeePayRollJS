@@ -12,16 +12,25 @@ describe("Testin Employee Pay Roll System", () => {
     })
 
     it("Test calculate daily wage method", () => {
-        const pay = employeePayRollSystem.calculateDailyWage();
+        const pay = employeePayRollSystem.calculateDailyWageFullTime();
         expect(pay).to.be.a('number')
         expect(pay).to.be.equal(160)
     })
 
     it("To check is system is able to differntiate between full time and part time employees ", () => {
-
         const partTimeEmployee = new EmployeeBuilder("Shravan", 123).setEmployeeType("Part").build();
         expect(partTimeEmployee.type).to.be.equal("Part");
         const fullTimeEmployee = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
         expect(fullTimeEmployee.type).to.be.equal("Full");
+    })
+
+
+    it("To calculate employe daily wage according to type", () => {
+        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
+        const pay = employeePayRollSystem.calculateWageOFEmployee(emp)
+        expect(pay).to.be.equal(160)
+        const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
+        const payPart = employeePayRollSystem.calculateWageOFEmployee(emp1)
+        expect(payPart).to.be.equal(32)
     })
 });
