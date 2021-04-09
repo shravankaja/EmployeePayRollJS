@@ -34,3 +34,4 @@ class EmployeeBuilder {
         return this.Employee
     }
 }
+ module.exports = EmployeeBuilder;
