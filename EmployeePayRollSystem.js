@@ -1,8 +1,8 @@
 console.log("Welcome to Employee Pay Roll System ")
-
+const constants = require('./Constants')
 class EmployeePayRollSystem {
 
-    checkAttandence () {
+    checkPresentOrNot () {
         let randomNumber = Math.round(Math.random())
         if(randomNumber == 1) {
             return true;
@@ -11,6 +11,11 @@ class EmployeePayRollSystem {
             return false;
         }
     };
+
+    calculateDailyWage () {
+        return constants.fullTimeEmployeeHours*constants.fullTimeEmployeePay;
+
+    }
 }
 
 module.exports = EmployeePayRollSystem;
