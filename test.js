@@ -40,8 +40,16 @@ describe("Testin Employee Pay Roll System", () => {
         const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
         const payFull = employeePayRollSystem.calculateMonthlyWage(emp);
         const payPart = employeePayRollSystem.calculateMonthlyWage(emp1)
-        expect(payFull).to.be.above(1000)
+        expect(payFull).to.be.within(0, 3000)
         expect(payPart).to.be.below(1000)
+    })
 
+    it("Test if employee has meet ellgibilty critria to get salary", () => {
+        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
+        const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
+        const payFull = employeePayRollSystem.calculateMonthlyWage(emp);
+        const payPart = employeePayRollSystem.calculateMonthlyWage(emp1)
+        expect(payFull).to.be.within(0, 3000)
+        expect(payPart).to.be.below(1000)
     })
 });
