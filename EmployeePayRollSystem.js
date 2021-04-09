@@ -3,9 +3,6 @@ const constants = require('./Constants')
 const EmployeeBuilder = require('./Employee')
 class EmployeePayRollSystem {
 
-    constructor() {
-        let map = new Map();
-    }
     checkPresentOrNot() {
         let randomNumber = Math.round(Math.random())
         if (randomNumber == 1) {
@@ -25,8 +22,8 @@ class EmployeePayRollSystem {
     }
 
     calculateWageOFEmployee(obj) {
-        const type = obj.type;
-        switch (type) {
+        let type1 = obj.type;
+        switch (type1) {
             case "Full":
                 return this.calculateDailyWageFullTime();
 
@@ -38,26 +35,32 @@ class EmployeePayRollSystem {
         }
     }
 
-    simulateTwentyDaysAttandence() {
+    simulateTwentyDaysAttandence(obj) {
+        let map = new Map()
         let noOfDaysPersent = 0;
         let noOfDaysAbsent = 0;
+        let day;
         for (let i = 0; i <= 20; i++) {
             let result = this.checkPresentOrNot();
             if (result == true) {
                 noOfDaysPersent += 1
+                day = "day" + i;
+                map.set(day, this.calculateWageOFEmployee(obj))
             }
             else if (result == false) {
                 noOfDaysAbsent += 1
+                day = "day" + i;
+                map.set(day, 0)
             }
         }
-        return [noOfDaysPersent, noOfDaysAbsent, noOfDaysPersent * 8, noOfDaysPersent * 4]
+        return [noOfDaysPersent, noOfDaysAbsent, noOfDaysPersent * 8, noOfDaysPersent * 4, map]
     }
 
     checkSalaryEligibilty(obj) {
-        let result = this.simulateTwentyDaysAttandence();
+        let result = this.simulateTwentyDaysAttandence(obj);
         let type = obj.type
         if (type == "Full") {
-            if (result[0] > 10 || result[2] > 80) {
+            if (result[0] > 1 || result[2] > 10) {
                 return true;
             }
             else {
@@ -75,11 +78,12 @@ class EmployeePayRollSystem {
 
     }
 
-    storeDailyWageAndDailyWage(name, dailyWage, TotalWage) {
+    storeDailyWageAndDailyWage(name1, dailyWage, TotalWage, map) {
         let empSalary = new Map();
-        empSalary.set('name', name);
+        empSalary.set('name', name1);
         empSalary.set('dailyWage', dailyWage)
         empSalary.set('TotalWage', TotalWage)
+        empSalary.set('DayWiseWage', map)
         return empSalary
     }
 
@@ -87,10 +91,11 @@ class EmployeePayRollSystem {
         let payEligibilty = this.checkSalaryEligibilty(obj);
         let map;
         if (payEligibilty == true) {
-            let result = this.simulateTwentyDaysAttandence()
+            let result = this.simulateTwentyDaysAttandence(obj)
             let dailyWage = this.calculateWageOFEmployee(obj)
             let result1 = dailyWage * result[0];
-            map = this.storeDailyWageAndDailyWage(obj.name, dailyWage, result1)
+            map = this.storeDailyWageAndDailyWage(obj.name, dailyWage, result1, result[4])
+            console.log(map)
             return [result1, map];
         }
         else {
