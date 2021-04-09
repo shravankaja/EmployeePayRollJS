@@ -1,0 +1,19 @@
+{
+  "name": "employeepayroll",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Employee.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shravankaja/EmployeePayRollJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shravankaja/EmployeePayRollJS/issues"
+  },
+  "homepage": "https://github.com/shravankaja/EmployeePayRollJS#readme"
+}
