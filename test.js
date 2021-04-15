@@ -1,77 +1,58 @@
 var expect = require('chai').expect
+const EmployeeBuilder = require('./Employee')
+const Randomization = require('./Randomization')
+const Compute = require('./Compute')
+const Simulate = require('./Simulate')
+const Store = require('./Store')
+const store = new Store();
+const simulate = new Simulate();
+const compute = new Compute();
+const random = new Randomization();
 const EmployeePayRollSystem = require('./EmployeePayRollSystem')
 const employeePayRollSystem = new EmployeePayRollSystem();
-const EmployeeBuilder = require('./Employee')
+const constants = require('./Constants')
 
 
 describe("Testin Employee Pay Roll System", () => {
 
     it("Test check Attendence", () => {
-        const result = employeePayRollSystem.checkPresentOrNot();
+        const result = random.getBoolean();
         expect(result).to.be.a('boolean')
     })
 
     it("Test calculate daily wage method", () => {
-        const pay = employeePayRollSystem.calculateDailyWageFullTime();
+        const pay = compute.computeWage(constants.fullTimeEmployeeHours,
+            constants.fullTimeEmployeePay);
         expect(pay).to.be.a('number')
         expect(pay).to.be.equal(160)
     })
 
-    it("To check is system is able to differntiate between full time and part time employees ", () => {
-        const partTimeEmployee = new EmployeeBuilder("Shravan", 123).setEmployeeType("Part").build();
-        expect(partTimeEmployee.type).to.be.equal("Part");
-        const fullTimeEmployee = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        expect(fullTimeEmployee.type).to.be.equal("Full");
-    })
-
-
-    it("To calculate employe daily wage according to type", () => {
-        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        const pay = employeePayRollSystem.calculateWageOFEmployee(emp)
-        expect(pay).to.be.equal(160)
-        const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
-        const payPart = employeePayRollSystem.calculateWageOFEmployee(emp1)
-        expect(payPart).to.be.equal(32)
-    })
-
 
     it("Test to calculate montly wage of employee based on type", () => {
-        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
-        const payFull = employeePayRollSystem.calculateMonthlyWage(emp);
-        const payPart = employeePayRollSystem.calculateMonthlyWage(emp1)
-        expect(payFull[0]).to.be.within(1200, 3000)
-        expect(payPart[0]).to.be.below(1000)
+        let emp = employeePayRollSystem.selectFullTimeOrPartTime("Shravna",1123);
+        const result = employeePayRollSystem.calculateMonthlyWage(emp)
+        expect(result[0]).to.be.within(0,3000)
     })
 
     it("Test if employee has meet ellgibilty critria to get salary", () => {
-        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        const emp1 = new EmployeeBuilder("Mark", 124).setEmployeeType("Part").build();
-        const payFull = employeePayRollSystem.calculateMonthlyWage(emp);
-        const payPart = employeePayRollSystem.calculateMonthlyWage(emp1)
-        expect(payFull[0]).to.be.within(1200, 3000)
-        expect(payPart[0]).to.be.below(1000)
+        let emp = employeePayRollSystem.selectFullTimeOrPartTime("Shravna",1123);
+        const result = employeePayRollSystem.checkSalaryEligibilty(emp)
+        expect(result).to.be.oneOf([true,false])
     })
-
-    it("Test if employee salary and daily wage is stored", () => {
-        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        const result = employeePayRollSystem.calculateMonthlyWage(emp);
-        let map = result[1];
-        const dailyWage = map.get('dailyWage');
-        console.log(map)
-        expect(dailyWage).to.be.equal(160);
-    })
+    
 
     it("Test if correct total wage is stored by summing up ", () => {
-        const emp = new EmployeeBuilder("Shravan", 123).setEmployeeType("Full").build();
-        const result = employeePayRollSystem.calculateMonthlyWage(emp);
+        let emp = employeePayRollSystem.selectFullTimeOrPartTime("Shravna",1123);
+        const result = employeePayRollSystem.calculateMonthlyWage(emp)
         let map1 = result[1];
         let map2 = map1.get('DayWiseWage')
         let sum = 0;
         for (let i = 0; i <= 20; i++) {
-            str = "day" + i;
+            str =  i;
             sum += map2.get(str);
         }
         expect(map1.get('TotalWage')).to.be.equal(sum);
     })
+    
 });
+
